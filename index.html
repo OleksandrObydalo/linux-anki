@@ -1,0 +1,182 @@
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Flashcards</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --card-background: #ffffff;
+            --text-color: #333333;
+            --back-color: #ecf0f1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+        }
+        
+        h1 {
+            margin-bottom: 10px;
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            height: 200px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+        
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .card-front {
+            background-color: var(--card-background);
+            color: var(--text-color);
+            border-left: 5px solid var(--secondary-color);
+        }
+        
+        .card-back {
+            background-color: var(--back-color);
+            color: var(--text-color);
+            transform: rotateY(180deg);
+            border-left: 5px solid var(--primary-color);
+        }
+        
+        .card-content {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Linux Команди - Флеш-Картки</h1>
+        <p>Натисніть на картку, щоб побачити відповідь</p>
+    </header>
+    
+    <div class="cards-container" id="cardsContainer"></div>
+    
+    <script>
+        // Flashcard data
+        const flashcards = [
+            {
+                front: "Яка команда використовується для того, щоб дізнатися, хто є поточним користувачем у Linux?",
+                back: "Команда — whoami."
+            },
+            {
+                front: "Що показує команда id?",
+                back: "Команда id показує ID користувача (UID), основний ID групи (GID) та всі додаткові групи, до яких належить користувач."
+            },
+            {
+                front: "Що означає значення UID 0?",
+                back: "UID 0 зарезервовано для користувача root."
+            },
+            {
+                front: "Яка структура рядка в файлі /etc/passwd?",
+                back: "username:password:UID:GID:description:homedir:shell"
+            },
+            {
+                front: "Що означає \"x\" у полі пароля в файлі /etc/passwd?",
+                back: "\"X\" вказує на те, що пароль зберігається в файлі /etc/shadow, де знаходиться зашифрований пароль."
+            },
+            {
+                front: "Що означає shell /sbin/nologin для користувача в файлі /etc/passwd?",
+                back: "Це означає, що користувач не може входити в систему інтерактивно."
+            },
+            {
+                front: "У чому різниця між командами useradd та adduser?",
+                back: "useradd — це бінарна команда, а adduser — це Perl скрипт, який використовує useradd для створення користувача. adduser є більш інтерактивним та інформативним."
+            },
+            {
+                front: "Який файл містить зашифровані паролі для груп?",
+                back: "Файл /etc/gshadow містить зашифровані паролі для груп."
+            },
+            {
+                front: "Для чого використовується команда usermod?",
+                back: "Команда usermod використовується для зміни даних користувача, таких як основна група, додаткові групи, shell та домашній каталог."
+            },
+            {
+                front: "Який аргумент потрібно використовувати з командою usermod, щоб додати додаткову групу до користувача?",
+                back: "Аргумент -aG використовується з командою usermod, щоб додати додаткову групу до користувача."
+            }
+        ];
+
+        // Generate cards
+        const cardsContainer = document.getElementById('cardsContainer');
+        
+        flashcards.forEach((card, index) => {
+            const cardElement = document.createElement('div');
+            cardElement.className = 'card';
+            cardElement.innerHTML = `
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="card-content">${card.front}</div>
+                    </div>
+                    <div class="card-back">
+                        <div class="card-content">${card.back}</div>
+                    </div>
+                </div>
+            `;
+            
+            cardElement.addEventListener('click', () => {
+                cardElement.classList.toggle('flipped');
+            });
+            
+            cardsContainer.appendChild(cardElement);
+        });
+    </script>
+</body>
+</html>
